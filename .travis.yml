@@ -1,0 +1,15 @@
+language: generic
+sudo: required
+dist: xenial
+
+matrix:
+  include:
+    - env: COQ_VERSION="8.9.0"  COQ_PACKAGE="coq-8.9.0"  PPA="ppa:jgross-h/many-coq-versions"
+    - env: COQ_VERSION="8.10.2" COQ_PACKAGE="coq-8.10.2" PPA="ppa:jgross-h/many-coq-versions-ocaml-4-05"
+
+before_install:
+  - if [ ! -z "$PPA" ]; then sudo add-apt-repository "$PPA" -y; fi
+  - travis_retry ./etc/ci/sudo-apt-get-update.sh -q
+  - travis_retry sudo apt-get install $COQ_PACKAGE -y --allow-unauthenticated
+
+script: make
